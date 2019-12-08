@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjunicom.scservice.dao.AdminMapper">
+
+    <resultMap id="adminMap" type="com.bjunicom.scservice.pojo.Admin">
+        <id property="admin_id" column="admin_id" />
+        <result property="admin_name" column="admin_name"/>
+        <result property="admin_oa" column="admin_oa" />
+        <result property="admin_phone" column="admin_phone"/>
+        <result property="admin_passwd" column="admin_passwd" />
+        <result property="admin_status" column="admin_status" />
+        <result property="admin_count" column="admin_count"/>
+        <result property="role_id" column="role_id"/>
+    </resultMap>
+
+
+    <select id="selectAdmin_OA" parameterType="string" resultMap="admin">
+        select *
+        from admin
+        where admin_oa = #{admin_oa}
+    </select>
+
+
+    <insert id="insertAdmin" parameterType="string">
+        insert
+        into admin
+        (admin_oa, admin_name,admin_phone,admin_passwd,admin_status,admin_count,admin_role)
+        values (#{admin_oa},#{admin_name},#{admin_phone},#{admin_passwd},#{admin_status},#{admin_count},#{role_id})
+    </insert>
+
+
+    <delete id="deleteAdmin" parameterType="integer">
+        DELETE FROM
+        admin
+        WHERE
+        admin_id =
+        #{admin_id}
+    </delete>
+
+
+    <select id="selectAdmin" resultMap="admin">
+        select *
+        from admin
+    </select>
+</mapper>
