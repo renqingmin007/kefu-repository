@@ -33,4 +33,9 @@ public class AdminService {
     public List<Admin> selectAdmin_OA(String admin_oa){
         return adminMapper.selectAdmin_OA(admin_oa);
     }
+    //工单完成，业务量加1
+    public void addCount(String admin_oa)
+    {
+        adminMapper.addCount(admin_oa);
+    }
 }

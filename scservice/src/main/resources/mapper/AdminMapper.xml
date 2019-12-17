@@ -28,6 +28,11 @@
         values (#{admin_oa},#{admin_name},#{admin_phone},#{admin_passwd},#{admin_status},#{admin_count},#{role_id})
     </insert>
 
+    <update id="addCount" parameterType="string">
+        update admin
+        set admin_count = admin_count + 1
+        where admin_oa = #{admin_oa}
+    </update>
 
     <delete id="deleteAdmin" parameterType="integer">
         DELETE FROM

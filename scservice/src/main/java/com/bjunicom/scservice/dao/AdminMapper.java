@@ -23,4 +23,6 @@ public interface AdminMapper {
     List<Admin> selectAdmin_OA(@Param( "admin_oa" )String admin_oa);
     //查询所有管理员
     List<Admin> selectAdmin();
+    //工单完成，业务量加1
+    void addCount(@Param( "admin_oa" )String admin_oa);
 }
