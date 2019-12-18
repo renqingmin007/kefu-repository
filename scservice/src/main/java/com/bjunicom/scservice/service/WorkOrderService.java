@@ -5,9 +5,12 @@ import com.bjunicom.scservice.pojo.WorkOrder;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WorkOrderService {
@@ -72,5 +75,10 @@ public class WorkOrderService {
         return workOrderMapper.searchOrder(agentOa, workOrderStatus);
     }
 
+    //图片上传
+    public void imageStorage(int workOrderId,String image)
+    {
+        workOrderMapper.imageStorage(workOrderId,image);
+    }
 
 }

@@ -3,12 +3,14 @@ package com.bjunicom.scservice.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import com.bjunicom.scservice.pojo.WorkOrder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-@Component
+@Repository
+@Component("WorkOrderMapper")
 public interface WorkOrderMapper {
     //工单录入
     void insertWorkOrder(WorkOrder wo);
@@ -36,4 +38,6 @@ public interface WorkOrderMapper {
     //查询某一客服关联的所有工单
     List<WorkOrder> searchOrder(@Param( "agentOa" )String agentOa, @Param("workOrderStatus")String workOrderStatus);
 
+    //图片路径存储
+    void imageStorage(@Param("workOrderId")Integer workOrderId,@Param("image")String image);
 }

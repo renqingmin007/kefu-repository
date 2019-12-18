@@ -1,36 +1,46 @@
 package com.bjunicom.scservice.controller;
 
-import com.bjunicom.scservice.pojo.Admin;
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import com.bjunicom.scservice.pojo.WorkOrder;
-import com.bjunicom.scservice.service.AdminService;
 import com.bjunicom.scservice.service.WorkOrderService;
+import com.bjunicom.scservice.utils.Exportutils;
+
+
 import com.bjunicom.scservice.utils.ResultModel;
 import com.bjunicom.scservice.utils.ResultTools;
-
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.Console;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+@RestController
 public class WorkOrderController {
 
-
     @Autowired
+
     private WorkOrderService workOrder;
-    private AdminService adminService;
     //工单录入接口
     @RequestMapping(value = "WorkOrderSubmit", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel WorkOrderSubmit(String name,String wechatid,String phone,String lessee,String problem,String image)
+    public ResultModel WorkOrderSubmit(@RequestParam String name, @RequestParam String wechatid, @RequestParam String phone, @RequestParam String lessee, @RequestParam String problem, @RequestParam String image)
     {
         if(name==null||name==""||wechatid==null||wechatid==""){
             return ResultTools.result(404,"基础信息缺失",null);
@@ -59,8 +69,8 @@ public class WorkOrderController {
     }
 
     //删除工单接口
-    @RequestMapping(value = "DeleteOrder", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel DeleteOrder(Integer workorder_id)
+    @RequestMapping(value = "/DeleteOrder", method = RequestMethod.POST, produces = "application/json")
+    public ResultModel DeleteOrder(@RequestParam Integer workorder_id)
     {
         try
         {
@@ -77,14 +87,14 @@ public class WorkOrderController {
 
     //修改工单接口
     @RequestMapping(value = "ModifyOrder", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel ModifyOrder(Integer workorder_id,String workorder_lessee,String workorder_phone,
-                                   String workorder_image,String workorder_problem)
+    public ResultModel ModifyOrder(@RequestParam Integer workorder_id,@RequestParam String workorder_lessee,@RequestParam String workorder_phone,
+                                   @RequestParam String workorder_image,@RequestParam String workorder_problem)
     {
         try {
-            WorkOrder wo = workOrder.selectById(workorder_id);
+            //List<WorkOrder> wo = workOrder.selectById(workorder_id);
             workOrder.modifyWorkOrder(workorder_id, workorder_phone, workorder_lessee, workorder_problem, workorder_image);
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("modifymsg", workorder_id.toString()+wo.getWorkOrderName());
+            map.put("modifymsg", workorder_id.toString());
             return ResultTools.result(0, "",map);
 
         }catch (Exception e) {
@@ -165,6 +175,7 @@ public class WorkOrderController {
     @RequestMapping(value = "SearchById", method = RequestMethod.GET, produces = "application/json")
     public WorkOrder SearchById(Integer workOrder_id){
         try {
+
             WorkOrder wo = workOrder.selectById(workOrder_id);
             return wo;
         }catch (Exception e) {
@@ -190,7 +201,7 @@ public class WorkOrderController {
         WorkOrder wo = workOrder.selectById(workorder_id);
         String agent = wo.getAgentOa();
         try {
-            adminService.addCount(agent);
+            //adminService.addCount(agent);
             workOrder.endWorkOrder(workorder_id, workorder_end);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("resolvemsg",workorder_id);
@@ -202,22 +213,83 @@ public class WorkOrderController {
 
     //导出Excel接口
     @RequestMapping(value = "ExportWorkOrder", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel ExportWorkOrder(List<Integer> id_list)
-    {
+    public ResultModel ExportWorkOrder(List<Integer> id_list, HttpServletResponse response, HttpSession session) throws IOException {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式  HH:mm:ss
+        String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+
+        ClassPathResource classPathResource = new ClassPathResource("application.properties");
+        String filepath = classPathResource.getPath()+"/excel/";
+        File filep = new File(filepath);
+        if(!filep.exists())
+        {
+            filep.mkdirs();
+        }
+
+        List<WorkOrder> wo_list = new ArrayList<>();
+        for(int i = 0;i<id_list.size();i++)
+        {
+            WorkOrder temp = workOrder.selectById(i);
+            if(temp!=null)
+            {
+                wo_list.add(temp);
+            }
+
+        }
+
+        TemplateExportParams params = new TemplateExportParams();
+        // 标题开始行
+        params.setHeadingStartRow(0);
+        // 标题行数
+        params.setHeadingRows(1);
+        // 设置sheetName，若不设置该参数，则使用得原本得sheet名称
+        params.setSheetName("工单列表");
+
+        // 获取报表内容
+        // 因为表数据是根据存储过程来实现的，不同的报表有不同的配置，
+        // 所以使用Map<String,Object>格式来接收
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("list", wo_list);
+        // 获取模板文件路径
+        // 这里有个很坑的地方，就是easypoi的API只能接收文件路径，无法读取文件
+        // 设置模板路径
+        params.setTemplateUrl(filepath);
+        // 获取workbook
+        Workbook workbook = ExcelExportUtil.exportExcel(params, data);
+        // exportFileName代表导出的文件名称
+        Exportutils.export(response, workbook, date+".xls");
+
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("insertmsg","admin");
+        map.put("exportmsg","success");
         return ResultTools.result(0, "",map);
     }
 
     //图片上传接口
     @RequestMapping(value = "ImageUpload", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel ImageUpload(String workorder_image)
-    {
+    public ResultModel ImageUpload(MultipartFile file, Integer workorder_id) throws IOException {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式  HH:mm:ss
+        String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+        //获取项目resource文件夹路径
+        ClassPathResource classPathResource = new ClassPathResource("application.properties");
+        String path = classPathResource.getPath()+"/image/";
+        String sourcename = file.getOriginalFilename();
+        String extendName = sourcename.substring(sourcename.lastIndexOf("."), sourcename.length());
+        String fileName =  workorder_id + date+ extendName;
 
+        //存储图片
+        File dir = new File(path, fileName);
+        File filepath = new File(path);
+        if(!filepath.exists())
+        {
+            filepath.mkdirs();
+        }
+        file.transferTo(dir);
+
+        //将图片地址存入数据库
+        workOrder.imageStorage(workorder_id, path+fileName);
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("insertmsg",workorder_image);
+        map.put("insertmsg",fileName+"已保存");
+
         return ResultTools.result(0, "",map);
     }
-
 
 }

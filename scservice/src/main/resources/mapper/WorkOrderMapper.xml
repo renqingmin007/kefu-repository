@@ -21,7 +21,7 @@
     <insert id="insertWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
         insert
         into work_order
-        (wechatId,workOrderName,workOrderLessee,workOrderPhone,workOrderProblem,workOrderImage,workOrderBackup)
+        (wechat_ID,work_order_name,work_order_lessee,work_order_phone,work_order_problem,work_order_image,work_order_backup)
         values (#{wechatId},#{workOrderName},#{workOrderLessee},#{workOrderPhone},#{workOrderProblem},#{workOrderImage},#{workOrderBackup})
     </insert>
 
@@ -34,27 +34,27 @@
 
     <update id="modifyWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
         update work_order
-        set work_order_phone = #{workOrderPhone},
-            work_order_lessee = #{workOrderLessee},
-            work_order_problem = #{workOrderProblem},
-            work_order_image = #{workOrderImage},
+        set work_order_phone = #{workOrderPhone,jdbcType=VARCHAR},
+            work_order_lessee = #{workOrderLessee,jdbcType=VARCHAR},
+            work_order_problem = #{workOrderProblem,jdbcType=VARCHAR},
+            work_order_image = #{workOrderImage,jdbcType=VARCHAR}
         where work_order_ID = #{workOrderId}
     </update>
 
-    <update id="sendWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
+    <update id="sendWorkOrder" parameterType="string">
         update work_order
         set agent_oa = #{agentOa},
             work_order_start = #{workOrderStart},
-            work_order_status = "未处理",
+            work_order_status = "未处理"
         where work_order_ID = #{workOrderId}
     </update>
 
-    <update id="deliverWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
+    <update id="deliverWorkOrder" parameterType="string">
         update work_order
         set agent_oa = #{agentOa},
             work_order_start = #{workOrderStart},
             work_order_delivery = #{workOrderStart},
-            work_order_status = "转派",
+            work_order_status = "转派"
         where work_order_ID = #{workOrderId}
     </update>
 
@@ -66,30 +66,37 @@
         where work_order_ID = #{workOrderId}
     </update>
 
-    <select id="selectWorkOrder">
+    <update id="imageStorage" parameterType="string">
+        update work_order
+        set
+            work_order_image = #{image}
+        where work_order_ID = #{workOrderId}
+    </update>
+
+    <select id="selectWorkOrder" resultType="java.util.Map">
         select *
         from work_order
     </select>
 
-    <select id="selectById" parameterType="integer">
+    <select id="selectById" parameterType="integer" resultType="com.bjunicom.scservice.pojo.WorkOrder">
         select *
         from work_order
         where work_order_ID = #{workOrderId}
     </select>
 
-    <select id="selectAgentOA" parameterType="string" >
+    <select id="selectAgentOA" parameterType="string" resultType="java.util.Map">
         select *
         from work_order
         where agent_oa = #{agentOa}
     </select>
 
-    <select id="selectByName" parameterType="string" >
+    <select id="selectByName" parameterType="string" resultType="java.util.Map">
         select *
         from work_order
         where work_order_name LIKE #{workOrderName}
     </select>
 
-    <select id="searchOrder" parameterType="string" >
+    <select id="searchOrder" parameterType="string" resultType="java.util.Map">
         select *
         from work_order
         where agent_oa = #{agentOa} and work_order_status = #{workOrderStatus}
