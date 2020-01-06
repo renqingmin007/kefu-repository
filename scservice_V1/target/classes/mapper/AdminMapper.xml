@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scservice.mapper.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.scservice.pojo.Admin">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="admin_oa" jdbcType="VARCHAR" property="admin_oa" />
+    <result column="admin_phone" jdbcType="VARCHAR" property="admin_phone" />
+    <result column="admin_status" jdbcType="VARCHAR" property="admin_status" />
+    <result column="admin_count" jdbcType="BIGINT" property="admin_count" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="role_id" jdbcType="BIGINT" property="role_id" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, password, admin_oa,admin_phone,admin_status,admin_count,salt,role_id
+  </sql>
+  <select id="selectAdmin_id" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select *
+    from admin
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAdmin_name" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from admin
+    where name = #{admin_name,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAdmin"  resultMap="BaseResultMap">
+    select *
+    from admin
+  </select>
+  <select id="selectAdmin_Server"  resultMap="BaseResultMap">
+    select *
+    from admin
+    where role_id = #{role_id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteAdmin" parameterType="java.lang.Long">
+    delete from admin
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertAdmin" keyColumn="id" keyProperty="id" parameterType="com.scservice.pojo.Admin" useGeneratedKeys="true">
+    insert into admin (name, password, admin_oa,admin_phone,admin_status,admin_count,salt,role_id
+      )
+    values (#{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{admin_oa,jdbcType=VARCHAR}, #{admin_phone,jdbcType=VARCHAR},#{admin_status,jdbcType=VARCHAR}, #{admin_count,jdbcType=BIGINT},#{salt,jdbcType=VARCHAR}, #{role_id,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.scservice.pojo.Admin">
+    update user
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="admin_oa != null">
+        admin_oa = #{admin_oa,jdbcType=VARCHAR},
+      </if>
+      <if test="admin_phone != null">
+        admin_phone = #{admin_phone,jdbcType=VARCHAR},
+      </if>
+      <if test="admin_status != null">
+        admin_status = #{admin_status,jdbcType=VARCHAR},
+      </if>
+      <if test="admin_count != null">
+        admin_count = #{admin_count,jdbcType=BIGINT},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="role_id != null">
+        role_id = #{admin_id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateAdmin" parameterType="com.scservice.pojo.Admin">
+    update user
+    set name = #{name,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      admin_oa = #{admin_oa,jdbcType=VARCHAR},
+      admin_phone = #{admin_phone,jdbcType=VARCHAR},
+      admin_status = #{admin_status,jdbcType=VARCHAR},
+      admin_count = #{admin_count,jdbcType=BIGINT},
+      role_id = #{role_id,jdbcType=BIGINT}
+      salt = #{salt,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByExample" parameterType="com.scservice.pojo.AdminExample" resultMap="BaseResultMap">
+    select
+    <!-- <if test="distinct">
+       distinct
+     </if>-->
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from admin
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

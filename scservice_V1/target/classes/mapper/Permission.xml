@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<mapper namespace="com.scservice.mapper.PermissionMapper">
+	    <select id="listPermissionsByAdminName"  parameterType="string" resultType="Permission">
+			select p.id, p.name from admin ad
+				left join admin_role au
+					on ad.id = au.uid left
+				join role r 
+					on r.id = au.rid
+				left join role_permission rp 
+					on r.id = rp.rid 
+				left join permission p 
+					on p.id = rp.pid 
+			where ad.name =#{0}
+	    </select>
+	</mapper>
+

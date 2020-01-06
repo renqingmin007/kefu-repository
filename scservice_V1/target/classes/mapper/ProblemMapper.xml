@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scservice.dao.ProblemMapper">
+
+    <resultMap id="problemMap" type="com.scservice.pojo.Problem">
+        <id column="problem_ID" jdbcType="BIGINT" property="problem_ID"  />
+        <result column="problem_content" jdbcType="VARCHAR" property="problem_content" />
+        <result column="parent_three_ID" jdbcType="VARCHAR" property="parent_three_ID"  />
+    </resultMap>
+
+
+    <insert id="addProblem" parameterType="com.scservice.pojo.Problem">
+       insert
+        into problem
+        (problem_content,problem_three_ID)
+    </insert>
+
+    <update id="addCount" parameterType="java.lang.String">
+        update admin
+        set admin_count = admin_count + 1
+        where admin_oa = #{admin_oa}
+    </update>
+</mapper>

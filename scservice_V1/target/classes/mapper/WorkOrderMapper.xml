@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scservice.dao.WorkOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.scservice.pojo.WorkOrder">
+        <id  column="work_order_ID" jdbcType="BIGINT" property="workOrderId"/>
+        <result  column="agent_oa" jdbcType="VARCHAR" property="agentOa"/>
+        <result  column="work_order_uid" jdbcType="VARCHAR" property="workOrderUid"/>
+        <result  column="wechat_ID" jdbcType="VARCHAR" property="wechatId"/>
+        <result  column="work_order_name" jdbcType="VARCHAR" property="workOrderName"/>
+        <result  column="work_order_lessee" jdbcType="VARCHAR" property="workOrderLessee"/>
+        <result  column="work_order_phone" jdbcType="VARCHAR" property="workOrderPhone"/>
+        <result  column="work_order_problem" jdbcType="VARCHAR" property="workOrderProblem"/>
+        <result  column="work_order_image" jdbcType="VARCHAR" property="workOrderImage"/>
+        <result  column="work_order_status" jdbcType="VARCHAR" property="workOrderStatus"/>
+        <result  column="work_order_start" jdbcType="VARCHAR" property="workOrderStart"/>
+        <result  column="work_order_end" jdbcType="VARCHAR" property="workOrderEnd"/>
+        <result  column="work_order_delivery" jdbcType="VARCHAR" property="workOrderDelivery"/>
+        <result  column="work_order_backup" jdbcType="VARCHAR" property="workOrderBackup"/>
+    </resultMap>
+
+    <insert id="insertWorkOrder" parameterType="com.scservice.pojo.WorkOrder">
+        insert
+        into work_order
+        (wechat_ID,work_order_uid,work_order_name,work_order_lessee,work_order_phone,work_order_problem,work_order_image,work_order_status,work_order_start,work_order_backup)
+        values (#{wechatId},#{workOrderUid},#{workOrderName},#{workOrderLessee},#{workOrderPhone},#{workOrderProblem},#{workOrderImage},#{workOrderStatus},#{workOrderStart},#{workOrderBackup})
+    </insert>
+
+    <delete id="deleteWorkOrder" parameterType="java.lang.Long">
+        DELETE FROM
+        work_order
+        WHERE
+        work_order_ID = #{workOrderId}
+    </delete>
+
+    <update id="modifyWorkOrder" parameterType="com.scservice.pojo.WorkOrder">
+        update work_order
+        set work_order_phone = #{workOrderPhone,jdbcType=VARCHAR},
+            work_order_lessee = #{workOrderLessee,jdbcType=VARCHAR},
+            work_order_problem = #{workOrderProblem,jdbcType=VARCHAR},
+            work_order_image = #{workOrderImage,jdbcType=VARCHAR}
+        where work_order_ID = #{workOrderId}
+    </update>
+
+    <update id="sendWorkOrder">
+        update work_order
+        set agent_oa = #{agentOa},
+            work_order_start = #{workOrderStart},
+            work_order_status = #{workOrderStatus}
+        where work_order_ID = #{workOrderId}
+    </update>
+
+    <update id="deliverWorkOrder" parameterType="com.scservice.pojo.WorkOrder">
+        update work_order
+        set agent_oa = #{agentOa},
+            work_order_start = #{workOrderStart},
+            work_order_delivery = #{workOrderStart},
+            work_order_status = "转派"
+        where work_order_ID = #{workOrderId}
+    </update>
+
+    <update id="endWorkOrder" parameterType="java.lang.Long">
+        update work_order
+        set
+            work_order_end = #{workOrderEnd},
+            work_order_status = "已处理"
+        where work_order_ID = #{workOrderId}
+    </update>
+
+    <update id="imageStorage" parameterType="java.lang.Long">
+        update work_order
+        set
+            work_order_image = #{image}
+        where work_order_ID = #{workOrderId}
+    </update>
+
+    <select id="selectWorkOrder" resultMap="BaseResultMap">
+        select *
+        from work_order
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from work_order
+        where work_order_ID = #{workOrderId}
+    </select>
+
+    <select id="selectAgentOA" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from work_order
+        where agent_oa = #{agentOa}
+    </select>
+
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from work_order
+        where work_order_name LIKE #{workOrderName}
+    </select>
+
+    <select id="searchOrder" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from work_order
+        where agent_oa = #{agentOa} and work_order_status = #{workOrderStatus}
+    </select>
+</mapper>

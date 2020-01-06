@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scservice.mapper.CategoryMapper">
+
+    <!--    一级类目    -->
+    <resultMap id="category_one_Map" type="com.scservice.pojo.Category_one">
+        <id column="category_one_ID" jdbcType="INTEGER" property="category_one_ID"  />
+        <result column="category_one_name" jdbcType="VARCHAR" property="category_one_name" />
+    </resultMap>
+
+    <select id="selectCategory_one"  resultMap="category_one_Map">
+        select *
+        from category_one
+    </select>
+
+
+    <insert id="insertCategory_one" parameterType="Category_one">
+        insert
+        into category_one
+        (category_one_name)
+        values (#{category_one_name})
+    </insert>
+
+
+    <delete id="deleteCategory_one" parameterType="java.lang.Integer">
+        DELETE FROM
+        category_one
+        WHERE
+        category_one_ID =
+        #{category_one_ID}
+    </delete>
+
+
+    <update id="modifyCategory_one" parameterType="java.lang.Integer" >
+        update category_one
+        set category_one_name = #{category_one_name}
+        where category_one_ID =
+        #{category_one_ID}
+    </update>
+
+
+
+    <!--    二级类目    -->
+    <resultMap id="category_two_Map" type="com.scservice.pojo.Category_two">
+        <id column="category_two_ID" jdbcType="INTEGER" property="category_two_ID"  />
+        <result column="category_two_name" jdbcType="VARCHAR" property="category_two_name" />
+    </resultMap>
+
+
+    <select id="selectCategory_two"  resultMap="category_two_Map">
+        select *
+        from category_two
+    </select>
+
+
+    <insert id="insertCategory_two" parameterType="Category_two">
+        insert
+        into category_two
+        (category_two_name)
+        values (#{category_two_name})
+    </insert>
+
+
+    <delete id="deleteCategory_two" parameterType="java.lang.Integer">
+        DELETE FROM
+        category_two
+        WHERE
+        category_two_ID =
+        #{category_two_ID}
+    </delete>
+
+
+    <update id="modifyCategory_two" parameterType="java.lang.Integer" >
+        update category_two
+        set category_two_name = #{category_two_name}
+        where category_two_ID =
+        #{category_two_ID}
+    </update>
+
+
+    <!--    三级类目    -->
+    <resultMap id="category_three_Map" type="com.scservice.pojo.Category_three">
+        <id column="category_three_ID" jdbcType="INTEGER" property="category_three_ID"  />
+        <result column="category_three_name" jdbcType="VARCHAR" property="category_three_name" />
+    </resultMap>
+
+
+    <select id="selectCategory_three"  resultMap="category_three_Map">
+        select *
+        from category_three
+    </select>
+
+
+    <insert id="insertCategory_three" parameterType="Category_three">
+        insert
+        into category_three
+        (category_three_name)
+        values (#{category_three_name})
+    </insert>
+
+
+    <delete id="deleteCategory_three" parameterType="java.lang.Integer">
+        DELETE FROM
+        category_three
+        WHERE
+        category_three_ID =
+        #{category_three_ID}
+    </delete>
+
+
+    <update id="modifyCategory_three" parameterType="java.lang.Integer" >
+        update category_three
+        set category_three_name = #{category_three_name}
+        where category_three_ID =
+        #{category_three_ID}
+    </update>
+</mapper>

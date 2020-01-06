@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scservice.dao.UserMapper">
+
+    <resultMap id="userMap" type="com.scservice.pojo.User">
+        <id property="user_ID" column="user_ID" />
+        <result property="openid" column="openid"/>
+        <result property="wx_country" column="wx_country" />
+        <result property="wx_city" column="wx_city"/>
+        <result property="wx_nickname" column="wx_nickname" />
+    </resultMap>
+
+
+    <insert id="userLogin" parameterType="user">
+       insert
+        into user
+        (user_ID, openid,wx_country,wx_city,wx_nickname)
+        values (#{user_ID},#{openid},#{wx_country},#{wx_city},#{wx_nickname})
+    </insert>
+</mapper>
