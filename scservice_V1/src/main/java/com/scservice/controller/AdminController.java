@@ -14,12 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("config")
 public class AdminController {
 	@Autowired
@@ -66,9 +67,13 @@ public class AdminController {
 
 	//根据id删除管理员或客服
 	@RequestMapping("deleteAdmin")
-	public String delete( long id) {
+	public ResultModel delete( Map map,long id) {
+		try{
 		adminService.deleteAdmin(id);
-		return "redirect:listAdmin";
+			return ResultTools.result(0, "删除成功",map);
+		}catch (Exception e) {
+			return ResultTools.result(404, "删除失败", null);
+		}
 	}
 
 	//修改管理员或客服角色、密码、工作状态等
