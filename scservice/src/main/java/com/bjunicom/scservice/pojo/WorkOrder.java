@@ -1,137 +1,145 @@
 package com.bjunicom.scservice.pojo;
 
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+
 public class WorkOrder {
 
-  private long workOrderId;
-  private String agentOa;
-  private String wechatId;
-  private String workOrderName;
-  private String workOrderLessee;
-  private String workOrderPhone;
-  private String workOrderProblem;
-  private String workOrderImage;
-  private String workOrderStatus;
-  private java.sql.Timestamp workOrderStart;
-  private java.sql.Timestamp workOrderEnd;
-  private java.sql.Timestamp workOrderDelivery;
-  private String workOrderBackup;
+    private long work_order_ID;
+    private String agent_oa;
+    private String wechat_ID;
+    private String work_order_name;
+    private String work_order_lessee;
+    private String work_order_phone;
+    private String work_order_problem;
+    private String work_order_image;
+    private String work_order_status;
+    private Timestamp work_order_start;
+    private Timestamp work_order_end;
+    private Timestamp work_order_delivery;
+    private String work_order_backup;
 
+    public long getWork_order_ID() {
+        return work_order_ID;
+    }
 
-  public long getWorkOrderId() {
-    return workOrderId;
-  }
+    public void setWork_order_ID(long work_order_ID) {
+        this.work_order_ID = work_order_ID;
+    }
 
-  public void setWorkOrderId(long workOrderId) {
-    this.workOrderId = workOrderId;
-  }
+    public String getAgent_oa() {
+        return agent_oa;
+    }
 
+    public void setAgent_oa(String agent_oa) {
+        this.agent_oa = agent_oa;
+    }
 
-  public String getAgentOa() {
-    return agentOa;
-  }
+    public String getWechat_ID() {
+        return wechat_ID;
+    }
 
-  public void setAgentOa(String agentOa) {
-    this.agentOa = agentOa;
-  }
+    public void setWechat_ID(String wechat_ID) {
+        this.wechat_ID = wechat_ID;
+    }
 
+    public String getWork_order_name() {
+        return work_order_name;
+    }
 
-  public String getWechatId() {
-    return wechatId;
-  }
+    public void setWork_order_name(String work_order_name) {
+        this.work_order_name = work_order_name;
+    }
 
-  public void setWechatId(String wechatId) {
-    this.wechatId = wechatId;
-  }
+    public String getWork_order_lessee() {
+        return work_order_lessee;
+    }
 
+    public void setWork_order_lessee(String work_order_lessee) {
+        this.work_order_lessee = work_order_lessee;
+    }
 
-  public String getWorkOrderName() {
-    return workOrderName;
-  }
+    public String getWork_order_phone() {
+        return work_order_phone;
+    }
 
-  public void setWorkOrderName(String workOrderName) {
-    this.workOrderName = workOrderName;
-  }
+    public void setWork_order_phone(String work_order_phone) {
+        this.work_order_phone = work_order_phone;
+    }
 
+    public String getWork_order_problem() {
+        return work_order_problem;
+    }
 
-  public String getWorkOrderLessee() {
-    return workOrderLessee;
-  }
+    public void setWork_order_problem(String work_order_problem) {
+        this.work_order_problem = work_order_problem;
+    }
 
-  public void setWorkOrderLessee(String workOrderLessee) {
-    this.workOrderLessee = workOrderLessee;
-  }
+    public String getWork_order_image() {
+        return work_order_image;
+    }
 
+    public void setWork_order_image(String work_order_image) {
+        this.work_order_image = work_order_image;
+    }
 
-  public String getWorkOrderPhone() {
-    return workOrderPhone;
-  }
+    public String getWork_order_status() {
+        return work_order_status;
+    }
 
-  public void setWorkOrderPhone(String workOrderPhone) {
-    this.workOrderPhone = workOrderPhone;
-  }
+    public void setWork_order_status(String work_order_status) {
+        this.work_order_status = work_order_status;
+    }
 
+    public Timestamp getWork_order_start() {
+        return work_order_start;
+    }
 
-  public String getWorkOrderProblem() {
-    return workOrderProblem;
-  }
+    public void setWork_order_start(Timestamp work_order_start) {
+        this.work_order_start = work_order_start;
+    }
 
-  public void setWorkOrderProblem(String workOrderProblem) {
-    this.workOrderProblem = workOrderProblem;
-  }
+    public Timestamp getWork_order_end() {
+        return work_order_end;
+    }
 
+    public void setWork_order_end(Timestamp work_order_end) {
+        this.work_order_end = work_order_end;
+    }
 
-  public String getWorkOrderImage() {
-    return workOrderImage;
-  }
+    public Timestamp getWork_order_delivery() {
+        return work_order_delivery;
+    }
 
-  public void setWorkOrderImage(String workOrderImage) {
-    this.workOrderImage = workOrderImage;
-  }
+    public void setWork_order_delivery(Timestamp work_order_delivery) {
+        this.work_order_delivery = work_order_delivery;
+    }
 
+    public String getWork_order_backup() {
+        return work_order_backup;
+    }
 
-  public String getWorkOrderStatus() {
-    return workOrderStatus;
-  }
+    public void setWork_order_backup(String work_order_backup) {
+        this.work_order_backup = work_order_backup;
+    }
 
-  public void setWorkOrderStatus(String workOrderStatus) {
-    this.workOrderStatus = workOrderStatus;
-  }
-
-
-  public java.sql.Timestamp getWorkOrderStart() {
-    return workOrderStart;
-  }
-
-  public void setWorkOrderStart(java.sql.Timestamp workOrderStart) {
-    this.workOrderStart = workOrderStart;
-  }
-
-
-  public java.sql.Timestamp getWorkOrderEnd() {
-    return workOrderEnd;
-  }
-
-  public void setWorkOrderEnd(java.sql.Timestamp workOrderEnd) {
-    this.workOrderEnd = workOrderEnd;
-  }
-
-
-  public java.sql.Timestamp getWorkOrderDelivery() {
-    return workOrderDelivery;
-  }
-
-  public void setWorkOrderDelivery(java.sql.Timestamp workOrderDelivery) {
-    this.workOrderDelivery = workOrderDelivery;
-  }
-
-
-  public String getWorkOrderBackup() {
-    return workOrderBackup;
-  }
-
-  public void setWorkOrderBackup(String workOrderBackup) {
-    this.workOrderBackup = workOrderBackup;
-  }
-
+    public ArrayList turnList()
+    {
+        ArrayList wolist = new ArrayList();
+        wolist.add(this.work_order_ID);
+        wolist.add(this.agent_oa);
+        wolist.add(this.wechat_ID);
+        wolist.add(this.work_order_name);
+        wolist.add(this.work_order_lessee);
+        wolist.add(this.work_order_phone);
+        wolist.add(this.work_order_problem);
+        wolist.add(this.work_order_image);
+        wolist.add(this.work_order_status);
+        wolist.add(this.work_order_start);
+        wolist.add(this.work_order_end);
+        wolist.add(this.work_order_delivery);
+        wolist.add(this.work_order_backup);
+        return wolist;
+    }
 }

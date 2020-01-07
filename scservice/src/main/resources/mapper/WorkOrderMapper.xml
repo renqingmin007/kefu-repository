@@ -3,74 +3,75 @@
 <mapper namespace="com.bjunicom.scservice.dao.WorkOrderMapper">
 
     <resultMap id="workorderMap" type="com.bjunicom.scservice.pojo.WorkOrder">
-        <id property="workOrderId" column="work_order_ID" />
-        <result property="agentOa" column="agent_oa"/>
-        <result property="wechatId" column="wechat_ID" />
-        <result property="workOrderName" column="work_order_name"/>
-        <result property="workOrderLessee" column="work_order_lessee" />
-        <result property="workOrderPhone" column="work_order_phone" />
-        <result property="workOrderProblem" column="work_order_problem"/>
-        <result property="workOrderImage" column="work_order_image"/>
-        <result property="workOrderStatus" column="work_order_status"/>
-        <result property="workOrderStart" column="work_order_start"/>
-        <result property="workOrderEnd" column="work_order_end"/>
-        <result property="workOrderDelivery" column="work_order_delivery"/>
-        <result property="workOrderBackup" column="work_order_backup"/>
+        <id property="work_order_ID" column="work_order_ID"/>
+        <result property="agent_oa" column="agent_oa"/>
+        <result property="wechat_ID" column="wechat_ID"/>
+        <result property="work_order_name" column="work_order_name"/>
+        <result property="work_order_lessee" column="work_order_lessee"/>
+        <result property="work_order_phone" column="work_order_phone"/>
+        <result property="work_order_problem" column="work_order_problem"/>
+        <result property="work_order_image" column="work_order_image"/>
+        <result property="work_order_status" column="work_order_status"/>
+        <result property="work_order_start" column="work_order_start"/>
+        <result property="work_order_end" column="work_order_end"/>
+        <result property="work_order_delivery" column="work_order_delivery"/>
+        <result property="work_order_backup" column="work_order_backup"/>
     </resultMap>
 
     <insert id="insertWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
         insert
         into work_order
         (wechat_ID,work_order_name,work_order_lessee,work_order_phone,work_order_problem,work_order_image,work_order_backup)
-        values (#{wechatId},#{workOrderName},#{workOrderLessee},#{workOrderPhone},#{workOrderProblem},#{workOrderImage},#{workOrderBackup})
+        values
+        (#{wechat_ID},#{work_order_name},#{work_order_lessee},#{work_order_phone},#{work_order_problem},#{work_order_image},#{work_order_backup})
     </insert>
 
     <delete id="deleteWorkOrder" parameterType="integer">
         DELETE FROM
         work_order
         WHERE
-        work_order_ID = #{workOrderId}
+        work_order_ID = #{work_order_ID}
     </delete>
 
     <update id="modifyWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
         update work_order
-        set work_order_phone = #{workOrderPhone,jdbcType=VARCHAR},
-            work_order_lessee = #{workOrderLessee,jdbcType=VARCHAR},
-            work_order_problem = #{workOrderProblem,jdbcType=VARCHAR},
-            work_order_image = #{workOrderImage,jdbcType=VARCHAR}
-        where work_order_ID = #{workOrderId}
+        set work_order_phone = #{work_order_phone},
+        work_order_lessee = #{work_order_lessee},
+        work_order_problem = #{work_order_problem},
+        work_order_image = #{work_order_image}
+        where work_order_ID = #{work_order_ID}
     </update>
 
-    <update id="sendWorkOrder" parameterType="string">
+    <update id="sendWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
         update work_order
-        set agent_oa = #{agentOa},
-            work_order_start = #{workOrderStart},
-            work_order_status = "未处理"
-        where work_order_ID = #{workOrderId}
+        set agent_oa = #{agent_oa},
+        work_order_start = #{work_order_start},
+        work_order_status = "未处理"
+        where work_order_ID = #{work_order_ID}
     </update>
 
-    <update id="deliverWorkOrder" parameterType="string">
+    <update id="deliverWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
         update work_order
-        set agent_oa = #{agentOa},
-            work_order_start = #{workOrderStart},
-            work_order_delivery = #{workOrderStart},
-            work_order_status = "转派"
-        where work_order_ID = #{workOrderId}
+        set agent_oa = #{agent_oa},
+        work_order_start = #{work_order_start},
+        work_order_delivery = #{work_order_start},
+        work_order_status = "转派"
+        where work_order_ID = #{work_order_ID}
     </update>
 
-    <update id="endWorkOrder" parameterType="string">
-        update work_order
-        set
-            work_order_end = #{workOrderEnd},
-            work_order_status = "已处理"
-        where work_order_ID = #{workOrderId}
-    </update>
-
-    <update id="imageStorage" parameterType="string">
+    <update id="endWorkOrder" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
         update work_order
         set
-            work_order_image = #{image}
-        where work_order_ID = #{workOrderId}
+        work_order_end = #{work_order_end},
+        work_order_status = "已处理"
+        where work_order_ID = #{work_order_ID}
+    </update>
+
+    <update id="imageStorage" parameterType="com.bjunicom.scservice.pojo.WorkOrder">
+        update work_order
+        set
+        work_order_image = #{work_order_image}
+        where work_order_ID = #{work_order_ID}
     </update>
 
     <select id="selectWorkOrder" resultType="java.util.Map">
@@ -81,24 +82,24 @@
     <select id="selectById" parameterType="integer" resultType="com.bjunicom.scservice.pojo.WorkOrder">
         select *
         from work_order
-        where work_order_ID = #{workOrderId}
+        where work_order.work_order_ID = #{work_order_ID}
     </select>
 
     <select id="selectAgentOA" parameterType="string" resultType="java.util.Map">
         select *
         from work_order
-        where agent_oa = #{agentOa}
+        where agent_oa = #{agent_oa}
     </select>
 
     <select id="selectByName" parameterType="string" resultType="java.util.Map">
         select *
         from work_order
-        where work_order_name LIKE #{workOrderName}
+        where work_order_name LIKE #{work_order_name}
     </select>
 
     <select id="searchOrder" parameterType="string" resultType="java.util.Map">
         select *
         from work_order
-        where agent_oa = #{agentOa} and work_order_status = #{workOrderStatus}
+        where agent_oa = #{agent_oa} and work_order_status = #{work_order_status}
     </select>
 </mapper>

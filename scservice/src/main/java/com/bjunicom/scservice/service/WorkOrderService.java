@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
@@ -16,69 +15,66 @@ import java.util.Map;
 public class WorkOrderService {
     @Autowired
     WorkOrderMapper workOrderMapper;
+
     //工单录入
-    public void insertWorkOrder(WorkOrder wo)
-    {
+    public void insertWorkOrder(WorkOrder wo) {
         workOrderMapper.insertWorkOrder(wo);
     }
+
     //删除工单
-    public void deleteWorkOrder(int workOrderId)
-    {
-        workOrderMapper.deleteWorkOrder(workOrderId);
+    public void deleteWorkOrder(int work_order_ID) {
+        workOrderMapper.deleteWorkOrder(work_order_ID);
     }
+
     //修改工单信息
-    public void modifyWorkOrder(int workOrderId,String workOrderPhone,String workOrderLessee,String workOrderProblem,String workOrderImage)
-    {
-        workOrderMapper.modifyWorkOrder(workOrderId, workOrderPhone, workOrderLessee, workOrderProblem, workOrderImage);
+    public void modifyWorkOrder(WorkOrder wo){
+        workOrderMapper.modifyWorkOrder(wo);
     }
 
     //派单
-    public void sendWorkOrder(int workOrderId, String agentOa, Timestamp workOrderStart)
-    {
-        workOrderMapper.sendWorkOrder(workOrderId, agentOa, workOrderStart);
+    public void sendWorkOrder(WorkOrder wo) {
+        workOrderMapper.sendWorkOrder(wo);
     }
+
     //转派工单
-    public void deliverWorkOrder(int workOrderId, String agentOa, Timestamp workOrderStart)
-    {
-        workOrderMapper.deliverWorkOrder(workOrderId, agentOa, workOrderStart);
+    public void deliverWorkOrder(WorkOrder wo) {
+        workOrderMapper.deliverWorkOrder(wo);
     }
+
     //关闭工单
-    public void endWorkOrder(int workOrderId, Timestamp workOrderEnd)
-    {
-        workOrderMapper.endWorkOrder(workOrderId, workOrderEnd);
+    public void endWorkOrder(WorkOrder wo) {
+        workOrderMapper.endWorkOrder(wo);
     }
 
 
     //查询所有工单信息
-    public List<WorkOrder> selectWorkOrder()
-    {
+    public List<WorkOrder> selectWorkOrder() {
         return workOrderMapper.selectWorkOrder();
     }
+
     //根据ID查询工单信息
-    public WorkOrder selectById(int workOrderId)
-    {
-        return workOrderMapper.selectById(workOrderId);
+    public WorkOrder selectById(int work_order_ID) {
+        return workOrderMapper.selectById(work_order_ID);
     }
+
     //根据名称查询工单
-    public List<WorkOrder> selectByName(String workOrderName)
-    {
-        return workOrderMapper.selectByName(workOrderName);
+    public List<WorkOrder> selectByName(String work_order_name) {
+        return workOrderMapper.selectByName(work_order_name);
     }
+
     //查询某一客服关联的所有工单
-    public List<WorkOrder> selectAgentOA(String agentOa)
-    {
-        return workOrderMapper.selectAgentOA(agentOa);
+    public List<WorkOrder> selectAgentOA(String agent_oa) {
+        return workOrderMapper.selectAgentOA(agent_oa);
     }
+
     //查询某一客服关联的所有工单
-    public List<WorkOrder> searchOrder(String agentOa, String workOrderStatus)
-    {
-        return workOrderMapper.searchOrder(agentOa, workOrderStatus);
+    public List<WorkOrder> searchOrder(String agent_oa, String work_order_status) {
+        return workOrderMapper.searchOrder(agent_oa, work_order_status);
     }
 
     //图片上传
-    public void imageStorage(int workOrderId,String image)
-    {
-        workOrderMapper.imageStorage(workOrderId,image);
+    public void imageStorage(WorkOrder wo) {
+        workOrderMapper.imageStorage(wo);
     }
 
 }
