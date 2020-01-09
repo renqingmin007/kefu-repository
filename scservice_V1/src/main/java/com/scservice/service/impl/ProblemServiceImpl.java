@@ -20,16 +20,16 @@ public class ProblemServiceImpl implements ProblemService {
     @Autowired
     ProblemMapper problemMapper;
 
-    //添加问题
-    public Problem insertProblem(Problem problem){
+    //添加问题接口
+    public void insertProblem(Problem problem){
 
-        return problemMapper.insertProblem(problem);
+         problemMapper.insertProblem(problem);
     }
 
     //修改问题
-    public Problem modifyProblem(Integer problem_id){
+    public void modifyProblem(Problem problem){
 
-        return problemMapper.modifyProblem(problem_id);
+         problemMapper.modifyProblem(problem);
     }
 
     //查询所有问题

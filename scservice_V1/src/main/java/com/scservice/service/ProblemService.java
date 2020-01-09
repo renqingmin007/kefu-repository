@@ -16,10 +16,10 @@ import java.util.List;
 public interface ProblemService {
 
     //添加问题
-     Problem insertProblem(Problem problem);
+     void insertProblem(Problem problem);
 
     //修改问题
-     Problem modifyProblem(Integer problem_id);
+     void modifyProblem(Problem problem);
 
     //查询所有问题
      List<Problem> selectProblem();

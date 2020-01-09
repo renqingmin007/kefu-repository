@@ -1,105 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.scservice.dao.WorkOrderMapper">
+<mapper namespace="com.scservice.mapper.WorkOrderMapper">
 
     <resultMap id="BaseResultMap" type="com.scservice.pojo.WorkOrder">
-        <id  column="work_order_ID" jdbcType="BIGINT" property="workOrderId"/>
-        <result  column="agent_oa" jdbcType="VARCHAR" property="agentOa"/>
-        <result  column="work_order_uid" jdbcType="VARCHAR" property="workOrderUid"/>
-        <result  column="wechat_ID" jdbcType="VARCHAR" property="wechatId"/>
-        <result  column="work_order_name" jdbcType="VARCHAR" property="workOrderName"/>
-        <result  column="work_order_lessee" jdbcType="VARCHAR" property="workOrderLessee"/>
-        <result  column="work_order_phone" jdbcType="VARCHAR" property="workOrderPhone"/>
-        <result  column="work_order_problem" jdbcType="VARCHAR" property="workOrderProblem"/>
-        <result  column="work_order_image" jdbcType="VARCHAR" property="workOrderImage"/>
-        <result  column="work_order_status" jdbcType="VARCHAR" property="workOrderStatus"/>
-        <result  column="work_order_start" jdbcType="VARCHAR" property="workOrderStart"/>
-        <result  column="work_order_end" jdbcType="VARCHAR" property="workOrderEnd"/>
-        <result  column="work_order_delivery" jdbcType="VARCHAR" property="workOrderDelivery"/>
-        <result  column="work_order_backup" jdbcType="VARCHAR" property="workOrderBackup"/>
+        <id  column="workOrderId" jdbcType="INTEGER" property="workOrderId"/>
+        <result  column="agentId" jdbcType="VARCHAR" property="agentId"/>
+        <result  column="workOrderUid" jdbcType="VARCHAR" property="workOrderUid"/>
+        <result  column="wechatId" jdbcType="VARCHAR" property="wechatId"/>
+        <result  column="workOrderName" jdbcType="VARCHAR" property="workOrderName"/>
+        <result  column="workOrderLessee" jdbcType="VARCHAR" property="workOrderLessee"/>
+        <result  column="workOrderPhone" jdbcType="VARCHAR" property="workOrderPhone"/>
+        <result  column="workOrderProblem" jdbcType="VARCHAR" property="workOrderProblem"/>
+        <result  column="workOrderImage" jdbcType="VARCHAR" property="workOrderImage"/>
+        <result  column="workOrderStatus" jdbcType="VARCHAR" property="workOrderStatus"/>
+        <result  column="workOrderStart" jdbcType="VARCHAR" property="workOrderStart"/>
+        <result  column="workOrderEnd" jdbcType="VARCHAR" property="workOrderEnd"/>
+        <result  column="workOrderDelivery" jdbcType="VARCHAR" property="workOrderDelivery"/>
+        <result  column="workOrderBackup" jdbcType="VARCHAR" property="workOrderBackup"/>
     </resultMap>
 
     <insert id="insertWorkOrder" parameterType="com.scservice.pojo.WorkOrder">
         insert
         into work_order
-        (wechat_ID,work_order_uid,work_order_name,work_order_lessee,work_order_phone,work_order_problem,work_order_image,work_order_status,work_order_start,work_order_backup)
-        values (#{wechatId},#{workOrderUid},#{workOrderName},#{workOrderLessee},#{workOrderPhone},#{workOrderProblem},#{workOrderImage},#{workOrderStatus},#{workOrderStart},#{workOrderBackup})
+        (wechatId,workOrderUid,workOrderName,workOrderLessee,workOrderPhone,workOrderProblem,workOrderImage,workOrderStatus,workOrderStart,workOrderBackup)
+        values (#{wechatId,jdbcType=VARCHAR},#{workOrderUid,jdbcType=VARCHAR},#{workOrderName,jdbcType=VARCHAR},#{workOrderLessee,jdbcType=VARCHAR},#{workOrderPhone,jdbcType=VARCHAR},#{workOrderProblem,jdbcType=VARCHAR},#{workOrderImage,jdbcType=VARCHAR},#{workOrderStatus,jdbcType=VARCHAR},#{workOrderStart,jdbcType=VARCHAR},#{workOrderBackup,jdbcType=VARCHAR})
     </insert>
 
-    <delete id="deleteWorkOrder" parameterType="java.lang.Long">
+    <delete id="deleteWorkOrder" parameterType="java.lang.Integer">
         DELETE FROM
         work_order
         WHERE
-        work_order_ID = #{workOrderId}
+        workOrderId = #{workOrderId}
     </delete>
 
     <update id="modifyWorkOrder" parameterType="com.scservice.pojo.WorkOrder">
         update work_order
-        set work_order_phone = #{workOrderPhone,jdbcType=VARCHAR},
-            work_order_lessee = #{workOrderLessee,jdbcType=VARCHAR},
-            work_order_problem = #{workOrderProblem,jdbcType=VARCHAR},
-            work_order_image = #{workOrderImage,jdbcType=VARCHAR}
-        where work_order_ID = #{workOrderId}
+        <set>
+        <if test="workOrderPhone != null">
+        workOrderPhone = #{workOrderPhone,jdbcType=VARCHAR},
+        </if>
+        <if test="workOrderLessee != null">
+            workOrderLessee = #{workOrderLessee,jdbcType=VARCHAR},
+        </if>
+        <if test="workOrderProblem != null">
+        workOrderProblem = #{workOrderProblem,jdbcType=VARCHAR},
+        </if>
+        <if test="workOrderImage != null">
+        workOrderImage = #{workOrderImage,jdbcType=VARCHAR}
+        </if>
+        </set>
+        where workOrderId = #{workOrderId,jdbcType=INTEGER}
     </update>
 
     <update id="sendWorkOrder">
         update work_order
-        set agent_oa = #{agentOa},
-            work_order_start = #{workOrderStart},
-            work_order_status = #{workOrderStatus}
-        where work_order_ID = #{workOrderId}
+        set agentId = #{agentId,jdbcType=BIGINT},
+            workOrderStart = #{workOrderStart,jdbcType=VARCHAR},
+            workOrderStatus = #{workOrderStatus,jdbcType=VARCHAR}
+        where workOrderId = #{workOrderId,jdbcType=INTEGER}
     </update>
 
-    <update id="deliverWorkOrder" parameterType="com.scservice.pojo.WorkOrder">
+    <update id="deliverWorkOrder" >
         update work_order
-        set agent_oa = #{agentOa},
-            work_order_start = #{workOrderStart},
-            work_order_delivery = #{workOrderStart},
-            work_order_status = "转派"
-        where work_order_ID = #{workOrderId}
+        set agentId = #{agentId,jdbcType=BIGINT},
+            workOrderStatus = #{workOrderStatus,jdbcType=BIGINT}
+        where workOrderId = #{workOrderId,jdbcType=INTEGER}
     </update>
 
     <update id="endWorkOrder" parameterType="java.lang.Long">
         update work_order
         set
-            work_order_end = #{workOrderEnd},
-            work_order_status = "已处理"
-        where work_order_ID = #{workOrderId}
+            workOrderEnd = #{workOrderEnd},
+            workOrderStatus = "已处理"
+        where workOrderId = #{workOrderId}
     </update>
 
     <update id="imageStorage" parameterType="java.lang.Long">
         update work_order
         set
-            work_order_image = #{image}
-        where work_order_ID = #{workOrderId}
+            workOrderImage = #{image}
+        where workOrderId = #{workOrderId}
     </update>
 
-    <select id="selectWorkOrder" resultMap="BaseResultMap">
+    <select id="searchAllOrder" resultMap="BaseResultMap">
         select *
         from work_order
     </select>
 
-    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="searchOrderById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select *
         from work_order
-        where work_order_ID = #{workOrderId}
+        where workOrderId = #{workOrderId}
     </select>
-
-    <select id="selectAgentOA" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="searchOrderByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
         select *
         from work_order
-        where agent_oa = #{agentOa}
+        where workOrderPhone = #{workOrderPhone,jdbcType=VARCHAR}
+    </select>
+    <select id="searchOrderByUid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from work_order
+        where workOrderUid = #{workOrderUid}
+    </select>
+    <select id="selectAgentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select *
+        from work_order
+        where agentId = #{agentId}
     </select>
 
     <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select *
         from work_order
-        where work_order_name LIKE #{workOrderName}
+        where workOrderName LIKE #{workOrderName}
     </select>
 
     <select id="searchOrder" parameterType="java.lang.String" resultMap="BaseResultMap">
         select *
         from work_order
-        where agent_oa = #{agentOa} and work_order_status = #{workOrderStatus}
+        where agentiD = #{agentId} and workOrderStatus = #{workOrderStatus}
+    </select>
+
+    <select id="selectTodoList"  resultMap="BaseResultMap">
+        select *
+        from work_order
+        where  workOrderStatus = "未处理" or workOrderStatus = "转派"
+    </select>
+    <select id="selectDoList"  resultMap="BaseResultMap">
+        select *
+        from work_order
+        where  workOrderStatus = "已处理"
     </select>
 </mapper>

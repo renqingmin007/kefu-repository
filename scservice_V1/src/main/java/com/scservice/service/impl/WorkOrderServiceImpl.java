@@ -1,7 +1,6 @@
 package com.scservice.service.impl;
 
 import com.scservice.mapper.WorkOrderMapper;
-import com.scservice.pojo.Admin;
 import com.scservice.pojo.WorkOrder;
 import com.scservice.service.WorkOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,30 +29,31 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
     //删除工单
     @Override
-    public void deleteWorkOrder(Long workOrderId)
+    public void deleteWorkOrder(Integer workOrderId)
     {
         workOrderMapper.deleteWorkOrder(workOrderId);
     }
 
     //修改工单信息
     @Override
-    public WorkOrder modifyWorkOrder(WorkOrder workOrder)
+    public void modifyWorkOrder(WorkOrder workOrder)
     {
-        return  workOrderMapper.modifyWorkOrder(workOrder);
+          workOrderMapper.modifyWorkOrder(workOrder);
     }
 
     //轮询派单
     @Override
-    public void sendWorkOrder(WorkOrder workOrder,String admin_oa)
+    public void sendWorkOrder(WorkOrder workOrder)
     {
-        workOrderMapper.sendWorkOrder(workOrder,admin_oa);
+        workOrderMapper.sendWorkOrder(workOrder);
     }
 
     //转派工单
     @Override
-    public void deliverWorkOrder(String workOrder_uid, Admin admin)
+    public void deliverWorkOrder(WorkOrder workOrder)
     {
-        workOrderMapper.deliverWorkOrder(workOrder_uid,admin);
+        workOrderMapper.deliverWorkOrder(workOrder);
+
     }
 
     //查询所有工单信息
@@ -78,15 +78,15 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     }
     //根据id查询工单
     @Override
-    public WorkOrder searchOrderById(Long workOrderId)
+    public WorkOrder searchOrderById(Integer workOrderId)
     {
         return workOrderMapper.searchOrderById(workOrderId);
     }
     //查询某一客服关联的所有工单
     @Override
-    public List<WorkOrder> selectAgentOA(String agentOa)
+    public List<WorkOrder> selectAgentId(Long agentId)
     {
-        return workOrderMapper.selectAgentOA(agentOa);
+        return workOrderMapper.selectAgentId(agentId);
     }
 
 

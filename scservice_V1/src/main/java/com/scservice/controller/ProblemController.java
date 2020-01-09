@@ -5,10 +5,7 @@ import com.scservice.service.ProblemService;
 import com.scservice.util.ResultModel;
 import com.scservice.util.ResultTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +18,7 @@ import java.util.Map;
  * @version: 1.0
  */
 @RestController
+@RequestMapping("config")
 public class ProblemController {
 
     @Autowired
@@ -29,7 +27,7 @@ public class ProblemController {
     //1、删除单个问题接口
     @RequestMapping(value = "deleteProblem", method = RequestMethod.POST, produces = "application/json")
     //@RequiresPermissions("admin:deleteAdmin")//删除管理员权限注解
-    public ResultModel deleteProblem(@RequestBody Integer problem_id) {
+    public ResultModel deleteProblem(@RequestParam Integer problem_id) {
         //认证逻辑
         try {
             problemService.deleteProblem(problem_id);
@@ -71,11 +69,11 @@ public class ProblemController {
 
     //4、修改单个问题
     @RequestMapping(value = "modifyProblem", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel ModifyOrder(@RequestBody Integer problem_id)
+    public ResultModel ModifyOrder(@RequestBody Problem problem)
     {
         try {
-            Problem problem = problemService.modifyProblem(problem_id);
             Map<String, Object> map = new HashMap<String, Object>();
+            problemService.modifyProblem(problem);
             map.put("data", problem);
             return ResultTools.result(0, "",map);
         }catch (Exception e) {

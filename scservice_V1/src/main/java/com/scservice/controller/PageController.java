@@ -19,7 +19,7 @@ import java.util.Map;
 
 //专门用于显示页面的控制器
 @RestController
-@RequestMapping("")
+@RequestMapping("config")
 public class PageController {
 
 	@Autowired

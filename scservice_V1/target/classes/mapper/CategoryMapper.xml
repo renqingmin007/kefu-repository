@@ -3,22 +3,20 @@
 <mapper namespace="com.scservice.mapper.CategoryMapper">
 
     <!--    一级类目    -->
-    <resultMap id="category_one_Map" type="com.scservice.pojo.Category_one">
+    <resultMap id="BaseResultMap" type="com.scservice.pojo.Category_one">
         <id column="category_one_ID" jdbcType="INTEGER" property="category_one_ID"  />
         <result column="category_one_name" jdbcType="VARCHAR" property="category_one_name" />
     </resultMap>
 
-    <select id="selectCategory_one"  resultMap="category_one_Map">
+    <select id="selectCategory_one"  resultMap="BaseResultMap">
         select *
         from category_one
     </select>
 
 
-    <insert id="insertCategory_one" parameterType="Category_one">
-        insert
-        into category_one
-        (category_one_name)
-        values (#{category_one_name})
+    <insert id="insertCategory_one" parameterType="com.scservice.pojo.Category_one">
+    insert into category_one (category_one_name)
+    value (#{category_one_name,jdbcType=VARCHAR})
     </insert>
 
 
@@ -27,27 +25,28 @@
         category_one
         WHERE
         category_one_ID =
-        #{category_one_ID}
+        #{category_one_ID,jdbcType=INTEGER}
     </delete>
 
 
-    <update id="modifyCategory_one" parameterType="java.lang.Integer" >
+    <update id="modifyCategory_one" parameterType="Category_one" >
         update category_one
-        set category_one_name = #{category_one_name}
+        set category_one_name = #{category_one_name,jdbcType=VARCHAR}
         where category_one_ID =
-        #{category_one_ID}
+        #{category_one_ID,jdbcType=INTEGER}
     </update>
 
 
 
     <!--    二级类目    -->
-    <resultMap id="category_two_Map" type="com.scservice.pojo.Category_two">
+    <resultMap id="BaseResultMap_two" type="com.scservice.pojo.Category_two">
         <id column="category_two_ID" jdbcType="INTEGER" property="category_two_ID"  />
         <result column="category_two_name" jdbcType="VARCHAR" property="category_two_name" />
+        <result column="parent_one_ID" jdbcType="INTEGER" property="parent_one_ID" />
     </resultMap>
 
 
-    <select id="selectCategory_two"  resultMap="category_two_Map">
+    <select id="selectCategory_two"  resultMap="BaseResultMap_two">
         select *
         from category_two
     </select>
@@ -56,8 +55,8 @@
     <insert id="insertCategory_two" parameterType="Category_two">
         insert
         into category_two
-        (category_two_name)
-        values (#{category_two_name})
+        (category_two_name,parent_one_ID)
+        values (#{category_two_name,jdbcType=VARCHAR},#{category_one_ID,jdbcType=INTEGER})
     </insert>
 
 
@@ -66,26 +65,34 @@
         category_two
         WHERE
         category_two_ID =
-        #{category_two_ID}
+        #{category_two_ID,jdbcType=INTEGER}
     </delete>
 
 
     <update id="modifyCategory_two" parameterType="java.lang.Integer" >
         update category_two
-        set category_two_name = #{category_two_name}
+        <set>
+        <if test="category_two_name != null">
+            category_two_name = #{category_two_name,jdbcType=VARCHAR},
+        </if>
+        <if test="parent_one_ID != null">
+            parent_one_ID = #{parent_one_ID,jdbcType=INTEGER}
+        </if>
+        </set>
         where category_two_ID =
-        #{category_two_ID}
+        #{category_two_ID,jdbcType=INTEGER}
     </update>
 
 
     <!--    三级类目    -->
-    <resultMap id="category_three_Map" type="com.scservice.pojo.Category_three">
+    <resultMap id="BaseResultMap_three" type="com.scservice.pojo.Category_three">
         <id column="category_three_ID" jdbcType="INTEGER" property="category_three_ID"  />
         <result column="category_three_name" jdbcType="VARCHAR" property="category_three_name" />
+        <result column="parent_two_ID" jdbcType="INTEGER" property="parent_two_ID" />
     </resultMap>
 
 
-    <select id="selectCategory_three"  resultMap="category_three_Map">
+    <select id="selectCategory_three"  resultMap="BaseResultMap_three">
         select *
         from category_three
     </select>
@@ -94,8 +101,8 @@
     <insert id="insertCategory_three" parameterType="Category_three">
         insert
         into category_three
-        (category_three_name)
-        values (#{category_three_name})
+        (category_three_name,parent_two_ID)
+        values (#{category_three_name,jdbcType=VARCHAR},#{parent_two_ID,jdbcType=INTEGER})
     </insert>
 
 
@@ -104,14 +111,23 @@
         category_three
         WHERE
         category_three_ID =
-        #{category_three_ID}
+        #{category_three_ID,jdbcType=INTEGER}
     </delete>
 
 
     <update id="modifyCategory_three" parameterType="java.lang.Integer" >
         update category_three
-        set category_three_name = #{category_three_name}
+
+        <set>
+        <if test="category_three_name != null">
+            category_three_name = #{category_three_name,jdbcType=VARCHAR},
+        </if>
+        <if test="parent_two_ID != null">
+            parent_two_ID = #{parent_two_ID,jdbcType=INTEGER},
+        </if>
+        </set>
         where category_three_ID =
-        #{category_three_ID}
+        #{category_three_ID,jdbcType=INTEGER}
     </update>
+
 </mapper>

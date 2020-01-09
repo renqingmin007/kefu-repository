@@ -5,6 +5,7 @@ import com.scservice.service.PermissionService;
 import com.scservice.util.ResultModel;
 import com.scservice.util.ResultTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,10 +25,10 @@ public class PermissionController {
 		List<Permission> ps = permissionService.list();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("data", ps);
-		return ResultTools.result(0, "查看成功",map);
+			return ResultTools.result(0, "查看成功",map);
 		}catch (Exception e) {
 			return ResultTools.result(404, "查看失败",null);
-			//查看失败
+
 		}
 	}
 
@@ -36,15 +37,15 @@ public class PermissionController {
 		try {
 		Permission permission = permissionService.get(id);
 		map.put("data", permission);
-		return ResultTools.result(0, "编辑成功",map);
+		    return ResultTools.result(0, "编辑成功",map);
 		}catch (Exception e) {
 			return ResultTools.result(404, "编辑失败",null);
-			//查看失败
 		}
 	}
 
 	@RequestMapping("updatePermission")
-	public ResultModel update(Map map,Permission permission) {
+	public ResultModel update(@RequestBody Permission permission) {
+		Map map =  new HashMap();
 		try {
 		permissionService.update(permission);
 		map.put("data", permission);
@@ -54,8 +55,10 @@ public class PermissionController {
 		}
 	}
 
+	//增加一个权限
 	@RequestMapping("addPermission")
-	public ResultModel list(Map map, Permission permission) {
+	public ResultModel add(@RequestBody Permission permission) {
+		Map map = new HashMap();
 		try {
 		System.out.println(permission.getName());
 		System.out.println(permission.getDesc_());

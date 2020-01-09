@@ -12,10 +12,7 @@ import com.scservice.util.ResultTools;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,18 +24,20 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
+@RequestMapping("config")
 public class WorkOrderController {
 
-    @Autowired
-    private WorkOrderService workOrderService;
-    private AdminService adminService;
-    private Integer sendRound = 0;
-    private long role_id = 1;
-    private String admin_oa;
+     @Autowired
+     WorkOrderService workOrderService;
+     @Autowired
+     AdminService adminService;
+     Integer sendRound = 0;
+     Long agent_id;
     //工单录入并轮询派单接口
     @RequestMapping(value = "workOrderSubmit", method = RequestMethod.POST, produces = "application/json")
     public ResultModel WorkOrderSubmit(@RequestBody WorkOrder workOrder)
     {
+         long role_id = 2;
         String name = workOrder.getWorkOrderName();
         String wechatid = workOrder.getWechatId();
         String lessee = workOrder.getWorkOrderLessee();
@@ -73,15 +72,16 @@ public class WorkOrderController {
             List<Admin> admin_server = adminService.selectAdmin_Server(role_id);
             Integer count = admin_server.size();
             if(sendRound <= count){
-                admin_oa = admin_server.get(sendRound).getAdmin_oa();
+                agent_id = admin_server.get(sendRound).getId();
                 sendRound++;
             }
             else {
                 sendRound = 0;
-                admin_oa = admin_server.get(sendRound).getAdmin_oa();
+                agent_id = admin_server.get(sendRound).getId();
                 sendRound++;
             }
-            workOrderService.sendWorkOrder(workOrder,admin_oa);
+            workOrder.setAgentId(agent_id);
+            workOrderService.sendWorkOrder(workOrder);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("data",workOrder);
             return ResultTools.result(0, "录入并派单成功",map);
@@ -94,13 +94,13 @@ public class WorkOrderController {
 
     //删除工单接口
     @RequestMapping(value = "deleteOrder", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel DeleteOrder(@RequestBody Long workorder_id)
+    public ResultModel DeleteOrder( @RequestParam Integer workOrderId)
     {
         try
         {
-            workOrderService.deleteWorkOrder(workorder_id);
+            workOrderService.deleteWorkOrder(workOrderId);
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("data",workorder_id);
+            map.put("data",workOrderId);
             return ResultTools.result(0, "删除成功",map);
         }
         catch (Exception e)
@@ -128,12 +128,16 @@ public class WorkOrderController {
     //转派接口
     @RequestMapping(value = "deliverOrder", method = RequestMethod.POST, produces = "application/json")
         //转派到其他客服
-    public ResultModel DeliverOrder(@RequestBody String workOrder_uid, Admin admin)
+    public ResultModel DeliverOrder(@RequestParam Long id,@RequestParam Integer workOrderId)
     {
         try{
-            workOrderService.deliverWorkOrder(workOrder_uid,admin);
+
+            WorkOrder workOrder = workOrderService.searchOrderById(workOrderId);
+            workOrder.setWorkOrderStatus("转派");
+            workOrder.setAgentId(id);
+            workOrderService.deliverWorkOrder(workOrder);
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("data", workOrder_uid);
+            map.put("data",id);
             return ResultTools.result(0, "转派成功",map);
 
         }catch (Exception e) {
@@ -143,7 +147,7 @@ public class WorkOrderController {
 
     //查询工单接口（根据工单编号查询工单）
     @RequestMapping(value = "searchOrderByUid", method = RequestMethod.GET, produces = "application/json")
-    public ResultModel searchOrderByUid(@RequestBody String uid)
+    public ResultModel searchOrderByUid(@RequestParam String uid)
     {
         try {
             List<WorkOrder> workerOrder = workOrderService.searchOrderByUid(uid);
@@ -158,7 +162,7 @@ public class WorkOrderController {
 
     //查询工单接口（根据工单联系电话查询工单）
     @RequestMapping(value = "searchOrderByPhone", method = RequestMethod.GET, produces = "application/json")
-    public ResultModel SearchOrderByphone(@RequestBody String phone)
+    public ResultModel SearchOrderByphone(@RequestParam String phone)
     {
         try {
             List<WorkOrder> workerOrder = workOrderService.searchOrderByPhone(phone);
@@ -188,9 +192,9 @@ public class WorkOrderController {
 
     //查询某个客服所有工单接口
     @RequestMapping(value = "searchByAgent", method = RequestMethod.GET, produces = "application/json")
-    public ResultModel SearchByAgent(@RequestBody String agent_oa){
+    public ResultModel SearchByAgent(@RequestParam Long agentId){
         try {
-            List<WorkOrder> work_agent = workOrderService.selectAgentOA(agent_oa);
+            List<WorkOrder> work_agent = workOrderService.selectAgentId(agentId);
             Map<String,Object> map = new HashMap<>();
             map.put("data",work_agent);
             return ResultTools.result(0, "查询成功",map);
@@ -203,6 +207,7 @@ public class WorkOrderController {
     @RequestMapping(value = "searchTodoList", method = RequestMethod.GET, produces = "application/json")
     public ResultModel SearchTodoList(){
         try {
+
             List<WorkOrder> todoList = workOrderService.selectTodoList();
             Map<String,Object> map = new HashMap<>();
             map.put("data",todoList);
@@ -239,7 +244,7 @@ public class WorkOrderController {
         }
 
         List<WorkOrder> wo_list = new ArrayList<>();
-        for(long i = 0;i<id_list.size();i++)
+        for(int i = 0;i<id_list.size();i++)
         {
             WorkOrder temp = workOrderService.searchOrderById(i);
             if(temp!=null)
@@ -301,7 +306,6 @@ public class WorkOrderController {
         workOrderService.imageStorage(workorder_id, path+fileName);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("insertmsg",fileName+"已保存");
-
         return ResultTools.result(0, "",map);
     }
 

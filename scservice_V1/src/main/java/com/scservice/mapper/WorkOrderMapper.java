@@ -1,6 +1,5 @@
 package com.scservice.mapper;
 
-import com.scservice.pojo.Admin;
 import com.scservice.pojo.WorkOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,16 +12,16 @@ public interface WorkOrderMapper {
     void insertWorkOrder(WorkOrder workOrder);
 
     //删除工单
-    void deleteWorkOrder(@Param("workOrderId") Long workOrderId);
+    void deleteWorkOrder(@Param("workOrderId") Integer workOrderId);
 
     //修改工单信息
-    WorkOrder modifyWorkOrder(WorkOrder workOrder);
+    void modifyWorkOrder(WorkOrder workOrder);
 
     //轮询派单
-    void sendWorkOrder(@Param("workOrder") WorkOrder workOrder, @Param("agentOa") String admin_oa);
+    void sendWorkOrder( WorkOrder workOrder);
 
     //转派工单
-    void deliverWorkOrder(String workOrder_uid, Admin admin);
+    void deliverWorkOrder(WorkOrder workOrder);
 
     //查询所有工单信息
     List<WorkOrder> searchAllOrder();
@@ -34,10 +33,10 @@ public interface WorkOrderMapper {
     List<WorkOrder> searchOrderByPhone(@Param("workOrderPhone") String workOrderPhone);
 
     //根据id查询工单
-    WorkOrder searchOrderById(@Param("workOrderId") Long workOrderId);
+    WorkOrder searchOrderById(@Param("workOrderId") Integer workOrderId);
 
     //查询某一客服关联的所有工单
-    List<WorkOrder> selectAgentOA(@Param("agentOa") String agentOa);
+    List<WorkOrder> selectAgentId(@Param("agentId") Long agentId);
 
 
     //查询待办工单列表

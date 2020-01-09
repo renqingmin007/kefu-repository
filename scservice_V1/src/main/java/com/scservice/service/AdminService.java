@@ -23,7 +23,7 @@ public interface AdminService {
      List<Admin> selectAdmin();
 
 
-    //客服或管理员修改密码
+    //客服或管理员修改密码等
      Admin updateAdmin(Admin admin);
 
 

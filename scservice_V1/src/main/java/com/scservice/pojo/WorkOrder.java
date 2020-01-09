@@ -3,9 +3,9 @@ package com.scservice.pojo;
 
 public class WorkOrder {
 
-  private Long workOrderId;
+  private Integer workOrderId;
   private String workOrderUid;
-  private String agentOa;
+  private Long agentId;
   private String wechatId;
   private String workOrderName;
   private String workOrderLessee;
@@ -20,11 +20,11 @@ public class WorkOrder {
   private String workOrderBackup;
 
 
-  public long getWorkOrderId() {
+  public Integer getWorkOrderId() {
     return workOrderId;
   }
 
-  public void setWorkOrderId(Long workOrderId) {
+  public void setWorkOrderId(Integer workOrderId) {
     this.workOrderId = workOrderId;
   }
 
@@ -36,12 +36,12 @@ public class WorkOrder {
     this.workOrderUid = workOrderUid;
   }
 
-  public String getAgentOa() {
-    return agentOa;
+  public Long getAgentId() {
+    return agentId;
   }
 
-  public void setAgentOa(String agentOa) {
-    this.agentOa = agentOa;
+  public void setAgentId(Long agentId) {
+    this.agentId = agentId;
   }
 
   public String getWechatId() {

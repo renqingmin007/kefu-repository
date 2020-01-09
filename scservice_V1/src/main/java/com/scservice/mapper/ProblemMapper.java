@@ -15,7 +15,7 @@ import java.util.List;
 public interface ProblemMapper {
 
     //增加问题
-    Problem insertProblem(Problem problem);
+    void insertProblem(Problem problem);
 
     //查询所有问题
     List<Problem> selectProblem();
@@ -24,7 +24,6 @@ public interface ProblemMapper {
     Integer deleteProblem(Integer problem_id);
 
     //根据问题id修改单个问题
-    Problem modifyProblem(Integer problem_id);
-
+    void modifyProblem(Problem problem);
 
 }

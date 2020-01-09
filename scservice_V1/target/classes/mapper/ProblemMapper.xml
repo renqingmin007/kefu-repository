@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.scservice.dao.ProblemMapper">
+<mapper namespace="com.scservice.mapper.ProblemMapper">
 
-    <resultMap id="problemMap" type="com.scservice.pojo.Problem">
-        <id column="problem_ID" jdbcType="BIGINT" property="problem_ID"  />
+    <resultMap id="BaseResultMap" type="com.scservice.pojo.Problem">
+        <id column="problem_ID" jdbcType="INTEGER" property="problem_ID"  />
         <result column="problem_content" jdbcType="VARCHAR" property="problem_content" />
-        <result column="parent_three_ID" jdbcType="VARCHAR" property="parent_three_ID"  />
+        <result column="parent_three_ID" jdbcType="INTEGER" property="parent_three_ID"  />
     </resultMap>
 
-
-    <insert id="addProblem" parameterType="com.scservice.pojo.Problem">
-       insert
-        into problem
-        (problem_content,problem_three_ID)
+    <insert id="insertProblem" parameterType="com.scservice.pojo.Problem">
+        insert into problem (problem_content, parent_three_ID)
+        values (#{problem_content,jdbcType=VARCHAR}, #{parent_three_ID,jdbcType=INTEGER})
     </insert>
 
     <update id="addCount" parameterType="java.lang.String">
@@ -20,4 +18,23 @@
         set admin_count = admin_count + 1
         where admin_oa = #{admin_oa}
     </update>
+
+    <update id="modifyProblem" parameterType="com.scservice.pojo.Problem" >
+        update problem
+        <set>
+        <if test="problem_content != null">
+         problem_content = #{problem_content,jdbcType=VARCHAR},
+        </if>
+        <if test="parent_three_ID != null">
+         parent_three_ID = #{parent_three_ID,jdbcType=INTEGER},
+        </if>
+        </set>
+        where problem_ID =
+        #{problem_ID,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectProblem"  resultMap="BaseResultMap">
+        select *
+        from problem
+    </select>
 </mapper>

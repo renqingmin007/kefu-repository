@@ -41,7 +41,8 @@ public class AdminServiceImpl implements AdminService {
     //客服或管理员修改密码
     @Override
     public Admin updateAdmin(Admin admin){
-        return adminMapper.updateAdmin(admin);
+        adminMapper.updateByPrimaryKeySelective(admin);
+        return null;
     }
 
 

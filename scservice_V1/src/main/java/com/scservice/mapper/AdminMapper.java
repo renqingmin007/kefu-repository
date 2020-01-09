@@ -29,7 +29,7 @@ public interface AdminMapper {
     Admin selectAdmin_id(@Param("admin_id") Long admin_id);
 
     //修改单个客服管理员
-    Admin updateAdmin( Admin admin);
+    void updateByPrimaryKeySelective( Admin admin);
 
     //查询所有客服及管理员
     List<Admin> selectAdmin();

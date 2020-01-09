@@ -10,8 +10,6 @@ import com.scservice.util.ResultTools;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +27,21 @@ public class AdminController {
 	AdminService adminService;
 	@Autowired
 	RoleService roleService;
+	//private Long role_id;
+	@RequestMapping("listAdmin_agent")
+	//列出所有客服人员
+	public ResultModel list() {
+		long role_id = 2;
+		Map map = new HashMap();
+		try {
+			List<Admin> admin_server = adminService.selectAdmin_Server(role_id);
+			map.put("admin_server",admin_server);
+			return ResultTools.result(0, "查询成功", map);
+		}
+		catch(Exception e){
+			return ResultTools.result(404, "查询失败", map);
+		}
+		}
 
 	//列出所有管理员及客服信息
 	@RequestMapping("listAdmin")
@@ -59,9 +72,9 @@ public class AdminController {
 
 		List<Role> roles = roleService.listRoles(admin);
 		map.put("currentRoles", roles);
-			return ResultTools.result(0, "查询成功",map);
+			return ResultTools.result(0, "编辑成功",map);
 		}catch (Exception e) {
-			return ResultTools.result(404, "查询失败", null);
+			return ResultTools.result(404, "编辑失败", null);
 		}
 	}
 
@@ -76,11 +89,12 @@ public class AdminController {
 		}
 	}
 
-	//修改管理员或客服角色、密码、工作状态等
+	//修改管理员或客服密码等
 	@RequestMapping("updateAdmin")
-	public ResultModel update(Map map,Admin admin, long[] roleIds) {
+	public ResultModel update(@RequestBody Admin admin) {
+		Map map = new HashMap();
 		try{
-		adminRoleService.setRoles(admin, roleIds);
+		//adminRoleService.setRoles(admin, roleIds);
 		String password = admin.getPassword();
 		// 如果在修改的时候没有设置密码，就表示不改动密码
 		if (admin.getPassword().length() != 0) {
@@ -97,15 +111,16 @@ public class AdminController {
 		map.put("admin",admin);
 			return ResultTools.result(0, "更新成功",map);
 		}catch (Exception e) {
-			return ResultTools.result(404, "更新失败", null);
+			return ResultTools.result(500, "更新失败:"+e.getMessage(), null);
 		}
 
 	}
 
 	//添加客服或管理员
 	@RequestMapping("addAdmin")
-	public ResultModel add(Map map, @RequestBody Admin admin) {
-        try{
+	public ResultModel add(@RequestBody Admin admin) {
+		Map map = new HashMap();
+		try{
 		String name = admin.getName();
 		String password = admin.getPassword();
 		String salt = new SecureRandomNumberGenerator().nextBytes().toString();
@@ -114,11 +129,10 @@ public class AdminController {
 
 		String encodedPassword = new SimpleHash(algorithmName, password, salt, times).toString();
 
-		Admin ad = new Admin();
-		ad.setName(name);
-		ad.setPassword(encodedPassword);
-		ad.setSalt(salt);
-		adminService.insertAdmin(ad);
+		admin.setName(name);
+		admin.setPassword(encodedPassword);
+		admin.setSalt(salt);
+		adminService.insertAdmin(admin);
 		map.put("ad",admin);
 			return ResultTools.result(0, "添加成功",map);
 		}catch (Exception e) {

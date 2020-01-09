@@ -20,30 +20,30 @@ public interface CategoryMapper {
     //删除单个一级分类
     void deleteCategory_one(Integer category_one_ID);
     //添加单个一级分类
-    Category_one insertCategory_one(Category_one category_one);
+    void insertCategory_one(Category_one category_one);
     //查询所有一级分类
     List<Category_one> selectCategory_one();
     //修改单个一级分类
-    Category_one modifyCategory_one(Integer category_one_ID);
+    void modifyCategory_one(Category_one category_one);
 
 
     //删除单个二级分类
     void deleteCategory_two(Integer category_two_ID);
     //添加单个二级分类
-    Category_two insertCategory_two(Category_two category_two);
+    void insertCategory_two(Category_two category_two);
     //查询所有二级分类
     List<Category_two> selectCategory_two();
     //修改单个二级分类
-    Category_two modifyCategory_two(Integer category_two_ID);
+    void modifyCategory_two(Category_two category_two);
 
 
     //删除单个三级分类
     void deleteCategory_three(Integer category_three_ID);
     //添加单个三级分类
-    Category_three insertCategory_three(Category_three category_three);
+    void insertCategory_three(Category_three category_three);
     //查询所有三级分类
     List<Category_three> selectCategory_three();
     //修改单个三级分类
-    Category_three modifyCategory_three(Integer category_three_ID);
+    void modifyCategory_three(Category_three category_three);
 
 }

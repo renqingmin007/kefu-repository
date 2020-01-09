@@ -23,6 +23,7 @@ import java.util.Map;
  * @version: 1.0
  */
 @RestController
+@RequestMapping("config")
 public class CategoryController {
 
     @Autowired
@@ -71,10 +72,10 @@ public class CategoryController {
 
     //4、修改一级分类
     @RequestMapping(value = "modifyCategory_one", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel ModifyCategory_one(@RequestBody Integer category_one_ID)
+    public ResultModel ModifyCategory_one(@RequestBody Category_one category_one)
     {
         try {
-            Category_one category_one = categoryService.modifyCategory_one(category_one_ID);
+            categoryService.modifyCategory_one(category_one);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("data", category_one);
             return ResultTools.result(0, "",map);
@@ -129,10 +130,10 @@ public class CategoryController {
 
     //4、修改二级分类
     @RequestMapping(value = "modifyCategory_two", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel ModifyCategory_two(@RequestBody Integer category_two_ID)
+    public ResultModel ModifyCategory_two(@RequestBody Category_two category_two)
     {
         try {
-            Category_two category_two = categoryService.modifyCategory_two(category_two_ID);
+             categoryService.modifyCategory_two(category_two);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("data", category_two);
             return ResultTools.result(0, "",map);
@@ -186,10 +187,10 @@ public class CategoryController {
 
     //4、修改三级分类
     @RequestMapping(value = "modifyCategory_three", method = RequestMethod.POST, produces = "application/json")
-    public ResultModel ModifyCategory_three(@RequestBody Integer category_three_ID)
+    public ResultModel ModifyCategory_three(@RequestBody Category_three category_three)
     {
         try {
-            Category_three category_three = categoryService.modifyCategory_three(category_three_ID);
+            categoryService.modifyCategory_three(category_three);
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("data", category_three);
             return ResultTools.result(0, "",map);

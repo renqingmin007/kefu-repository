@@ -8,7 +8,9 @@ import com.scservice.service.RoleService;
 import com.scservice.util.ResultModel;
 import com.scservice.util.ResultTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class RoleController {
 	@Autowired
 	PermissionService permissionService;
 
+	//角色列表及其权限
 	@RequestMapping("listRole")
 	public ResultModel list(Map map) {
         try {
@@ -62,20 +65,24 @@ public class RoleController {
         }
 	}
 
+	//更改角色信息及其所有的相关权限
 	@RequestMapping("updateRole")
-	public ResultModel update(Map map,Role role, long[] permissionIds) {
+	public ResultModel update(@RequestBody  Role role, @RequestParam long[] permissionIds) {
         try {
+        Map map = new HashMap();
 		rolePermissionService.setPermissions(role, permissionIds);
 		roleService.update(role);
 		map.put("role",role);
-        return ResultTools.result(0, "查询成功",map);
+        return ResultTools.result(0, "更新成功",map);
         }catch (Exception e) {
-            return ResultTools.result(404, "查询失败",null);
+            return ResultTools.result(404, "更新失败",null);
         }
 	}
 
+	//角色添加接口（增加一个角色）
 	@RequestMapping("addRole")
-	public ResultModel list(Map map, Role role) {
+	public ResultModel list( @RequestBody Role role) {
+		Map map = new HashMap();
 	    try{
 		System.out.println(role.getName());
 		System.out.println(role.getDesc_());
@@ -87,8 +94,11 @@ public class RoleController {
         }
 	}
 
+	//删除某个角色
 	@RequestMapping("deleteRole")
-	public ResultModel delete(Map map, long id) {
+	public ResultModel delete( @RequestBody long id) {
+
+		Map map = new HashMap();
         try{
 		roleService.delete(id);
 		map.put("id",id);

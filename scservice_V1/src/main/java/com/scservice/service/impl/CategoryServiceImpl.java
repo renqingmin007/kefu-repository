@@ -29,10 +29,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     //添加一个一级分类
-    public Category_one insertCategory_one(Category_one category_one)
+    public void insertCategory_one(Category_one category_one)
 
     {
-        return categoryMapper.insertCategory_one(category_one);
+         categoryMapper.insertCategory_one(category_one);
     }
     @Override
     //查询所有一级分类
@@ -42,8 +42,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     //修改单个一级分类
-    public Category_one modifyCategory_one(Integer category_one_ID){
-        return categoryMapper.modifyCategory_one(category_one_ID);
+    public void modifyCategory_one(Category_one category_one){
+         categoryMapper.modifyCategory_one(category_one);
     }
     @Override
     //删除某个二级分类
@@ -53,10 +53,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     //添加一个二级分类
-    public Category_two insertCategory_two(Category_two category_two)
+    public void insertCategory_two(Category_two category_two)
 
     {
-        return categoryMapper.insertCategory_two(category_two);
+         categoryMapper.insertCategory_two(category_two);
     }
     @Override
     //查询所有二级分类
@@ -65,8 +65,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     //修改单个二级分类
-    public Category_two modifyCategory_two(Integer category_two_ID){
-        return categoryMapper.modifyCategory_two(category_two_ID);
+    public void modifyCategory_two(Category_two category_two){
+         categoryMapper.modifyCategory_two(category_two);
     }
     @Override
     //删除某个三级分类
@@ -75,10 +75,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     //添加一个三级分类
-    public Category_three insertCategory_three(Category_three category_three)
+    public void insertCategory_three(Category_three category_three)
 
     {
-        return categoryMapper.insertCategory_three(category_three);
+         categoryMapper.insertCategory_three(category_three);
     }
     @Override
     //查询所有三级分类
@@ -87,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     //修改单个三级分类
-    public Category_three modifyCategory_three(Integer category_three_ID){
-        return categoryMapper.modifyCategory_three(category_three_ID);
+    public void modifyCategory_three(Category_three category_three){
+         categoryMapper.modifyCategory_three(category_three);
     }
 }
